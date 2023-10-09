@@ -1,0 +1,78 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        // For Android libraries
+        from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
+    } else {
+        // For pure Kotlin libraries, in case you have them
+        from sourceSets.main.java.srcDirs
+        from sourceSets.main.kotlin.srcDirs
+    }
+}
+
+
+artifacts {
+    archives androidSourcesJar
+}
+
+group = GROUP
+version = VERSION_NAME
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                // The coordinates of the library, being set from variables that
+                // we'll set up later
+                groupId GROUP
+                artifactId POM_ARTIFACT_ID
+                version VERSION_NAME
+
+                // Two artifacts, the `aar` (or `jar`) and the sources
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    artifact("$buildDir/libs/${project.getName()}-${version}.jar")
+                }
+
+                artifact androidSourcesJar
+
+                // Mostly self-explanatory metadata
+                pom {
+                    name = POM_ARTIFACT_ID
+                    description = POM_DESCRIPTION
+                    url = POM_URL
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
+                            email = POM_DEVELOPER_EMAIL
+                        }
+                    }
+
+                    // Version control info - if you're using GitHub, follow the
+                    // format as seen here
+                    scm {
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                        url = POM_SCM_URL
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}

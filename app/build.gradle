@@ -1,8 +1,9 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
 }
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 android {
     compileSdk 33
@@ -38,28 +39,4 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = GROUP
-            artifactId = POM_ARTIFACT_ID
-            version = VERSION_NAME
-
-            afterEvaluate {
-                from components.release
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url = 'url'
-            credentials {
-                username = ""
-                password = ""
-            }
-        }
-    }
 }
