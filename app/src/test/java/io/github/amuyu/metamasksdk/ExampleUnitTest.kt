@@ -1,4 +1,4 @@
-package com.github.amuyu.metamasksdk
+package io.github.amuyu.metamasksdk
 
 import org.junit.Test
 

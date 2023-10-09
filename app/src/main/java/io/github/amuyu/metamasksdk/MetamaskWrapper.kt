@@ -1,4 +1,4 @@
-package com.github.amuyu.metamasksdk
+package io.github.amuyu.metamasksdk
 
 import android.content.Context
 import io.metamask.androidsdk.ApplicationRepository
