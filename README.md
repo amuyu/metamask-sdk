@@ -1,5 +1,5 @@
 # MetaMask Android SDK
-[Metamask Android SDK](https://github.com/MetaMask/metamask-mobile/tree/main/android) 에서 
+[Metamask Android SDK](https://github.com/MetaMask/metamask-android-sdk) 에서 
 `org.jetbrains.kotlin.android`, `gradle` version을 낮추고 일부 dependency를 제거한 버전
 
 * 사용 dependency
