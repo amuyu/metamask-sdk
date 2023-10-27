@@ -2,15 +2,20 @@ package io.metamask.androidsdk
 
 import android.content.Intent
 import android.net.Uri
+import io.github.amuyu.metamasksdk.MetamaskDisconnectEvent
+import java.lang.ref.WeakReference
 import java.util.*
 
 class EthereumViewModel constructor (
-    private val applicationRepository: ApplicationRepository
+    private val applicationRepository: ApplicationRepository,
+    metamaskDisconnectEvent: MetamaskDisconnectEvent
     ) : EthereumEventCallback {
 
     private var connectRequestSent = false
     private val communicationClient = CommunicationClient(applicationRepository.context, this)
     private var _ethereumState: EthereumState = EthereumState("", "", "")
+
+    private val metamaskDisconnectEventRef: WeakReference<MetamaskDisconnectEvent> = WeakReference(metamaskDisconnectEvent)
 
     // Ethereum LiveData
     val ethereumState: EthereumState get() = _ethereumState
@@ -55,6 +60,10 @@ class EthereumViewModel constructor (
         Logger.log("Ethereum:: ChainId changed: $newChainId")
         chainId = newChainId
         _ethereumState = _ethereumState.copy(chainId= newChainId)
+    }
+
+    override fun onDisconnect() {
+        metamaskDisconnectEventRef.get()?.run { onDisconnect() }
     }
 
     // Set session duration in seconds

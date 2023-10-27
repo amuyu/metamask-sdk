@@ -63,6 +63,7 @@ internal class CommunicationClient(context: Context, callback: EthereumEventCall
             messageService = null
             isServiceConnected = false
             Log.e(TAG,"CommunicationClient:: Service disconnected $name")
+            callback.onDisconnect()
             trackEvent(Event.SDK_DISCONNECTED, null)
         }
 
