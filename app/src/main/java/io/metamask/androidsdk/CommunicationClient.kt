@@ -60,10 +60,10 @@ internal class CommunicationClient(context: Context, callback: EthereumEventCall
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
+            callback.onDisconnect()
             messageService = null
             isServiceConnected = false
             Log.e(TAG,"CommunicationClient:: Service disconnected $name")
-            callback.onDisconnect()
             trackEvent(Event.SDK_DISCONNECTED, null)
         }
 
@@ -467,6 +467,7 @@ internal class CommunicationClient(context: Context, callback: EthereumEventCall
             Logger.log("CommunicationClient:: Unbinding service")
             appContextRef.get()?.unbindService(serviceConnection)
             isServiceConnected = false
+            sentOriginatorInfo = false
         }
     }
 

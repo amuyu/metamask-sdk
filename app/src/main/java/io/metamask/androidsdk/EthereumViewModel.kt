@@ -64,6 +64,8 @@ class EthereumViewModel constructor (
 
     override fun onDisconnect() {
         metamaskDisconnectEventRef.get()?.run { onDisconnect() }
+        clearSession()
+        disconnect()
     }
 
     // Set session duration in seconds
